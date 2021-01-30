@@ -16,6 +16,8 @@ from dependencies.auth import get_current_user
 
 from templates import templates
 
+from db.exceptions import DuplicateEntry
+
 router = APIRouter(tags=["auth"])
 logger.setLevel(logging.DEBUG)
 
@@ -42,16 +44,22 @@ def token(form_data: Login) -> Token:
     return Token(**{"access_token": access_token, "token_type": "bearer"})
 
 
-@router.post('/register', response_model=Token)
+@router.post('/register', response_model=Token, responses={409: {'description': 'username or email already in use'}})
 def register(user: UserIn) -> Token:
     """
     create a new account
     """
-    user = User.objects.create(
-        username=user.username,
-        hashed_password=get_password_hash(user.password),
-        email=user.email
-    )
+    try:
+        user = User.objects.create(
+            username=user.username,
+            hashed_password=get_password_hash(user.password),
+            email=user.email
+        )
+    except DuplicateEntry:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="username or email already in use",
+        )
     access_token = create_access_token(
         data={"sub": user.username, "scopes": ["me"]}
     )
