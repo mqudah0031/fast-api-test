@@ -25,6 +25,7 @@ from auth.models.user import User
 from app.models.app import App
 # ---- end models ----
 from db.base import Base
+from db import connection_url
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
@@ -45,7 +46,8 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    # url = config.get_main_option("sqlalchemy.url")
+    url = connection_url
     context.configure(
         url=url,
         target_metadata=target_metadata,
