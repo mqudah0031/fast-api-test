@@ -52,3 +52,39 @@ from auth.models.user import User
 from db.base import Base
 target_metadata = Base.metadata
 ```
+
+## Database models
+database models are normal python classes inheriting `base` from sqlalchemy.
+
+this project provides a django-like manager for models
+
+example:
+
+```python
+from sqlalchemy import Column, String
+from db.base import Base
+from db.manager import Manager
+
+
+class User(Base):
+    __tablename__ = "user"
+    username = Column(String, unique=True)
+
+ +   objects: Manager # <---
+
+    def __repr__(self):
+        return f"<User(username={})>".format(self.username)
+
+
++ User.objects = Manager(User) # <----
+
+```
+you can now use it like this
+```python
+User.objects.create(...)
+User.objects.filter(...)
+User.objects.find(....)
+```
+the manager will handle creating and closing sessions for these actions.
+
+to create a custom method simple inherit the Manger class and use it in the Model.
