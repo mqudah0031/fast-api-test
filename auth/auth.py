@@ -1,5 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Request
 from fastapi.responses import HTMLResponse
+from fastapi.logger import logger
+import logging
 from typing import Optional
 
 from .models.user import User
@@ -15,6 +17,7 @@ from dependencies.auth import get_current_user
 from templates import templates
 
 router = APIRouter(tags=["auth"])
+logger.setLevel(logging.DEBUG)
 
 
 @router.post(
@@ -44,7 +47,7 @@ def register(user: UserIn) -> Token:
     """
     create a new account
     """
-    user = User.create(
+    user = User.objects.create(
         username=user.username,
         hashed_password=get_password_hash(user.password),
         email=user.email

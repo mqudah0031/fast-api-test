@@ -27,7 +27,7 @@ async def _get_current_user(security_scopes: SecurityScopes, token: str = Depend
         token_data = TokenData(scopes=token_scopes, username=username)
     except (JWTError, ValidationError):
         raise credentials_exception
-    user = User.filter(username=token_data.username)
+    user = User.objects.find(username=token_data.username)
     if user is None:
         raise credentials_exception
 
