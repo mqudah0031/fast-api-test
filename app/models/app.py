@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Sequence
+from sqlalchemy import Column, Integer, String, Sequence, ForeignKey
 from sqlalchemy.orm import relationship
 from db.base import Base
 
@@ -11,4 +11,5 @@ class App(Base):
     client_secret = Column(String)
     redirect_uri = Column(String)
 
+    developer_id = Column(Integer, ForeignKey('user.id'))
     developer = relationship("user")
