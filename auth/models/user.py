@@ -1,5 +1,5 @@
 from ..utils import verify_password
-from sqlalchemy import Column, Integer, String, Sequence
+from sqlalchemy import Column, Integer, String, Sequence, Boolean
 from db.base import Base
 from db.manager import Manager
 
@@ -10,6 +10,7 @@ class User(Base):
     username = Column(String, unique=True)
     email = Column(String, unique=True)
     hashed_password = Column(String)
+    is_superuser = Column(Boolean, default=False)
 
     objects: Manager
 

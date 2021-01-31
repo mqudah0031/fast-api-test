@@ -8,7 +8,16 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
-
+import sys
+import os
+sys.path.append(os.getcwd())
+from settings import DATABASE
+section = config.config_ini_section
+config.set_section_option(section, 'DB_USER', DATABASE['USER'])
+config.set_section_option(section, 'DB_PASS', DATABASE['PASSWORD'])
+config.set_section_option(section, 'DB_HOST', DATABASE['HOST'])
+config.set_section_option(section, 'DB_PORT', DATABASE['PORT'])
+config.set_section_option(section, 'DB_NAME', DATABASE['NAME'])
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
@@ -17,9 +26,6 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-import sys
-import os
-sys.path.append(os.getcwd())
 # ---- models -----
 from auth.models.user import User
 from app.models.app import App
@@ -46,8 +52,7 @@ def run_migrations_offline():
     script output.
 
     """
-    # url = config.get_main_option("sqlalchemy.url")
-    url = connection_url
+    url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
         target_metadata=target_metadata,
