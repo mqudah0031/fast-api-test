@@ -52,3 +52,13 @@ class Manager:
         objs = session.query(self.model).filter_by(**kwargs).first()
         session.close()
         return objs
+
+    def delete(self, **kwargs):
+        """
+        deletes a row based on the given arguments
+        :param kwargs:
+        :return:
+        """
+        session = Session(bind=engine)
+        objs = session.query(self.model).filter_by(**kwargs).delete()
+        session.close()
