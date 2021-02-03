@@ -1,10 +1,9 @@
-import requests
-from .schemas.branches import CareemBranchResponse
+from .schemas.catalogs import CareemBranchResponse
 from .schemas import Pagination
 from .exceptions.branches import BranchNotFound
 
 
-class CareemBranches:
+class CareemCatalogs:
 
     def __init__(self, client, brand_id, careem):
         # branches api
